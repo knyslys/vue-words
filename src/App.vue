@@ -7,7 +7,7 @@ import Navigation from "./components/Navigation.vue";
 <template>
   <main>
     <navigation></navigation>
-    <!-- <RouterView /> -->
+    <RouterView />
   </main>
 </template>
 
@@ -30,5 +30,6 @@ body {
   min-height: 100vh;
   background-color: $rich-black;
   color: white;
+  font-family: $font-family;
 }
 </style>

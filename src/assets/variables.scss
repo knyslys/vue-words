@@ -1,13 +1,17 @@
+@import url("https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&display=swap");
+
 $rich-black: rgba(14, 19, 31, 1);
 $delft-blue: rgba(56, 64, 95, 1);
 $english-violet: rgba(89, 84, 108, 1);
 $cadet-gray: rgba(139, 147, 156, 1);
 $imperial-red: rgba(255, 0, 53, 1);
 $default-padding: 3rem;
+$font-family: "Raleway", sans-serif;
 
 a {
   font-size: 1.6rem;
   text-decoration: none;
+  font-family: $font-family;
 }
 ul {
   list-style-type: none;
