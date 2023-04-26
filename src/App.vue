@@ -5,8 +5,8 @@ import Navigation from "./components/Navigation.vue";
 </script>
 
 <template>
+  <navigation></navigation>
   <main>
-    <navigation></navigation>
     <RouterView />
   </main>
 </template>

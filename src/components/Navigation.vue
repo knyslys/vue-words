@@ -55,7 +55,6 @@ a:hover {
 
 ul {
   margin-left: auto;
-  // justify-self: flex-end;
   display: flex;
   align-items: center;
   gap: 5rem;
