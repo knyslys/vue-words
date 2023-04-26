@@ -12,25 +12,7 @@
 import Container from "@/components/UI/Container.vue";
 import MainGame from "@/components/Game/MainGame.vue";
 import { ref, onMounted, watch } from "vue";
-const gameStart = ref(false);
-const word = ref("");
 const gameStarted = ref(false);
-onMounted(() => {
-  window.addEventListener("keydown", doTest);
-});
-
-const doTest = (e) => {
-  let key = String.fromCharCode(e.keyCode).toUpperCase();
-  if (e.keyCode === 8 && word.value === "") return;
-  if (e.keyCode === 8 && word.value.length > 0) {
-    const sliced = word.value.slice(0, -1);
-    word.value = sliced.trim();
-    console.log(word.value);
-  } else {
-    word.value += key;
-    console.log(word.value);
-  }
-};
 </script>
 
 <style lang="scss">

@@ -5,7 +5,7 @@
       <div class="game-screen" v-if="!gameFinished">
         <h3>{{ roundIndex }} / 10</h3>
         <div class="timer">
-          <h3>{{ displaySeconds }}s</h3>
+          <h3>{{ displaySeconds }}</h3>
 
           :
 
@@ -16,6 +16,7 @@
       </div>
       <div class="game-screen-done" v-else>
         <h1>Done!</h1>
+        <h1>Your score: {{ calculateScore() }}</h1>
       </div>
     </div>
   </div>
@@ -27,6 +28,7 @@ const timer = ref(3);
 const startGame = ref(false);
 const gameFinished = ref(false);
 const roundIndex = ref(1);
+const guessedWords = ref(0);
 const listOfWords = [
   {
     word: "infamous",
@@ -63,12 +65,9 @@ const listOfWords = [
 ];
 const scoreTimerMiliSeconds = ref(0);
 const scoreTimerSeconds = ref(0);
-const scoreTimerMinutes = ref(0);
-
 const selectedWord = ref(generateWord());
 const typedWord = ref("");
-// console.log(listOfWords[randomWord]);
-
+let interval;
 const displaySeconds = computed(() => {
   if (scoreTimerSeconds.value < 10) return "0:" + scoreTimerSeconds.value;
   else return scoreTimerSeconds;
@@ -81,12 +80,12 @@ watch(typedWord, (newValue) => {
   console.log(randomWord);
   listOfWords[randomWord].antonym.forEach((word) => {
     if (typedWord.value.toLowerCase() === word) {
+      guessedWords.value++;
       nextWord();
     }
   });
 });
 watch(startGame, (newValue) => {
-  let interval;
   if (newValue === true) {
     interval = setInterval(() => {
       if (scoreTimerMiliSeconds.value >= 60) {
@@ -94,6 +93,7 @@ watch(startGame, (newValue) => {
         scoreTimerSeconds.value++;
       }
       scoreTimerMiliSeconds.value++;
+      console.log("veikiu");
     }, 10);
   } else {
     clearInterval(interval);
@@ -101,9 +101,18 @@ watch(startGame, (newValue) => {
 });
 watch(roundIndex, (newValue) => {
   if (newValue === 11) {
+    clearInterval(interval);
     gameFinished.value = true;
   }
 });
+
+const calculateScore = () => {
+  const scoreForGuessedWords = guessedWords.value * 100;
+  const timePenalty =
+    scoreTimerSeconds.value + scoreTimerMiliSeconds.value * 0.1;
+  const finalScore = Math.ceil(scoreForGuessedWords / timePenalty);
+  return finalScore;
+};
 
 function nextWord() {
   typedWord.value = "";
@@ -161,7 +170,7 @@ const timerUntilGameBeggins = setInterval(() => {
 .selected-word {
   position: relative;
   min-height: 30rem;
-  background-color: red;
+  background-color: $english-violet;
   min-width: 30vw;
   display: flex;
   justify-content: center;
