@@ -62,11 +62,195 @@ const listOfWords = [
     word: "cool",
     antonym: ["hot", "warm"],
   },
+  {
+    word: "cool",
+    antonym: ["hot", "warm"],
+  },
+  {
+    word: "ignorance",
+    antonym: [
+      "talent",
+      "wisdom",
+      "literacy",
+      "experience",
+      "cognizance",
+      "undearstanding",
+    ],
+  },
+  {
+    word: "talent",
+    antonym: ["stupidity", "weakness", "incapacity", "ignorance", "inability"],
+  },
+  {
+    word: "want",
+    antonym: ["dislike", "hate", "plenty", "distaste"],
+  },
+  {
+    word: "plenty",
+    antonym: ["lack", "need", "few", "little", "scarcity"],
+  },
+  {
+    word: "fat",
+    antonym: ["skinny", "slight", "thin", "slim", "lean"],
+  },
+  {
+    word: "elite",
+    antonym: ["poor", "common", "lower", "inferior", "bad", "second-rate"],
+  },
+  {
+    word: "worst",
+    antonym: ["best"],
+  },
+  {
+    word: "reduce",
+    antonym: ["extend", "expand", "enlarge", "grow"],
+  },
+  {
+    word: "innocent",
+    antonym: ["guilty", "immoral", "sinful"],
+  },
+  {
+    word: "evil",
+    antonym: ["good", "lovely", "aiding", "attractive", "moral", "right"],
+  },
+  {
+    word: "aiding",
+    antonym: ["harmful", "hurting"],
+  },
+  {
+    word: "strong",
+    antonym: ["weak", "fragile", "sluggish"],
+  },
+  {
+    word: "cheap",
+    antonym: ["expensive", "costly"],
+  },
+  {
+    word: "rude",
+    antonym: ["polite", "gentle", "nice"],
+  },
+  {
+    word: "bold",
+    antonym: ["afraid", "coward", "cowardly", "fearful"],
+  },
+  {
+    word: "busy",
+    antonym: ["idle", "inactive", "unbusy"],
+  },
+  {
+    word: "alive",
+    antonym: ["dead"],
+  },
+  {
+    word: "fresh",
+    antonym: ["old", "stale", "used", "worn"],
+  },
+  {
+    word: "quick",
+    antonym: ["slow", "clumsy", "sluggish"],
+  },
+  {
+    word: "diligent",
+    antonym: ["lazy"],
+  },
+  {
+    word: "dangerous",
+    antonym: ["good", "healthy", "safe", "secure", "ok", "great"],
+  },
+  {
+    word: "risky",
+    antonym: ["certain", "healthy", "harmless"],
+  },
+  {
+    word: "ugly",
+    antonym: ["attractive", "beatiful", "pretty", "handsome"],
+  },
+  {
+    word: "heavy",
+    antonym: ["easy", "light"],
+  },
+  {
+    word: "complex",
+    antonym: ["simple"],
+  },
+  {
+    word: "infinite",
+    antonym: ["finite"],
+  },
+  {
+    word: "pure",
+    antonym: [
+      "dark",
+      "fake",
+      "dishonest",
+      "counterfeit",
+      "unclear",
+      "abnormal",
+      "cloudy",
+    ],
+  },
+  {
+    word: "predictable",
+    antonym: ["unpredictable"],
+  },
+  {
+    word: "night",
+    antonym: ["day"],
+  },
+  {
+    word: "near",
+    antonym: ["far", "distant", "away"],
+  },
+  {
+    word: "past",
+    antonym: ["after", "future", "current", "present"],
+  },
+  {
+    word: "old",
+    antonym: ["young"],
+  },
+  {
+    word: "modern",
+    antonym: ["old", "old-fashioned", "ancient", "outdated"],
+  },
+  {
+    word: "sharp",
+    antonym: ["blunt", "dull"],
+  },
+  {
+    word: "smart",
+    antonym: ["stupid", "dull", "foolish"],
+  },
+  {
+    word: "pain",
+    antonym: ["aid", "pleasure", "relief", "joy"],
+  },
+  {
+    word: "cool",
+    antonym: ["hot", "warm"],
+  },
+  {
+    word: "cool",
+    antonym: ["hot", "warm"],
+  },
+  {
+    word: "cool",
+    antonym: ["hot", "warm"],
+  },
+  {
+    word: "cool",
+    antonym: ["hot", "warm"],
+  },
+  {
+    word: "cool",
+    antonym: ["hot", "warm"],
+  },
 ];
 const scoreTimerMiliSeconds = ref(0);
 const scoreTimerSeconds = ref(0);
 const selectedWord = ref(generateWord());
 const typedWord = ref("");
+
 let interval;
 const displaySeconds = computed(() => {
   if (scoreTimerSeconds.value < 10) return "0:" + scoreTimerSeconds.value;
@@ -155,6 +339,9 @@ const timerUntilGameBeggins = setInterval(() => {
 </script>
 
 <style lang="scss" scoped>
+.dog {
+  max-width: 70rem;
+}
 @import "./../../assets/variables.scss";
 .timer {
   position: absolute;
