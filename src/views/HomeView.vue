@@ -5,7 +5,7 @@
         <button @click="gameStarted = true">Play</button>
         <button>How to play?</button>
       </div>
-      <main-game v-else></main-game>
+      <main-game v-else @go-back="backToMenu"></main-game>
     </Transition>
   </container>
 </template>
@@ -15,6 +15,9 @@ import Container from "@/components/UI/Container.vue";
 import MainGame from "@/components/Game/MainGame.vue";
 import { ref, onMounted, watch } from "vue";
 const gameStarted = ref(false);
+const backToMenu = () => {
+  gameStarted.value = false;
+};
 </script>
 
 <style lang="scss">
@@ -55,8 +58,23 @@ button {
 .game-appear-leave-active {
   animation: test 0.3s linear 0.3s;
 }
+.game-appear-enter-active {
+  animation: test 0.3s linear reverse;
+}
 .game-appear-leave-active button {
   animation: test2 0.3s forwards;
+}
+
+.game-appear-enter-from button {
+  opacity: 0;
+}
+
+.game-appear-enter-active button {
+  transition: 5s all linear;
+}
+
+.game-appear-enter-to button {
+  opacity: 1;
 }
 @keyframes test {
   0% {

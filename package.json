@@ -8,12 +8,14 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "animate.css": "^4.1.1",
     "pinia": "^2.0.32",
     "string-similarity": "^4.0.4",
     "vue": "^3.2.47",
     "vue-router": "^4.1.6"
   },
   "devDependencies": {
+    "@iconify/vue": "^4.1.1",
     "@vitejs/plugin-vue": "^4.2.1",
     "sass": "^1.62.1",
     "sass-loader": "^13.2.2",

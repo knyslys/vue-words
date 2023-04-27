@@ -1,8 +1,14 @@
 <template>
   <div>
-    <Transition name="game-appear">
+    <Transition name="game-appear" mode="out-in">
       <h1 v-if="!startGame">{{ timer }}</h1>
       <div class="selected-word" v-else>
+        <div class="go-back" @click="$emit('go-back')">
+          <Icon
+            icon="material-symbols:arrow-back-ios-rounded"
+            class="back-icon"
+          />
+        </div>
         <div class="game-screen" v-if="!gameFinished">
           <div class="game-info">
             <h3>{{ roundIndex }} / 10</h3>
@@ -23,7 +29,10 @@
         </div>
         <div class="game-screen-done" v-else>
           <h1>Done!</h1>
-          <h1>Your score: {{ calculateScore() }}</h1>
+          <div class="score-counter">
+            <h1>Your score:</h1>
+            <h1>{{ calculateScore() }}</h1>
+          </div>
         </div>
       </div>
     </Transition>
@@ -31,8 +40,10 @@
 </template>
 
 <script setup>
-import { ref, watch, onMounted, computed } from "vue";
+import { ref, watch, onMounted, computed, onUnmounted } from "vue";
+import "animate.css";
 import * as stringSimilarity from "string-similarity";
+import { Icon } from "@iconify/vue";
 const timer = ref(3);
 const startGame = ref(false);
 const gameFinished = ref(false);
@@ -326,9 +337,16 @@ function generateWord() {
 onMounted(() => {
   if (startGame) window.addEventListener("keydown", typeWord);
 });
+onUnmounted(() => {
+  clearInterval(interval);
+});
 
 const typeWord = (e) => {
   let key = String.fromCharCode(e.keyCode).toUpperCase();
+  if (e.keyCode === 16) {
+    nextWord();
+    return;
+  }
   if (e.keyCode === 8 && typedWord.value === "") return;
   if (e.keyCode === 8 && typedWord.value.length > 0) {
     const sliced = typedWord.value.slice(0, -1);
@@ -352,9 +370,6 @@ const timerUntilGameBeggins = setInterval(() => {
 </script>
 
 <style lang="scss" scoped>
-.dog {
-  max-width: 70rem;
-}
 @import "./../../assets/variables.scss";
 .timer {
   position: absolute;
@@ -378,6 +393,7 @@ const timerUntilGameBeggins = setInterval(() => {
   flex-direction: column;
   padding: $default-padding;
   border-radius: 15px;
+  overflow: hidden;
 }
 
 .typed-word {
@@ -393,6 +409,23 @@ const timerUntilGameBeggins = setInterval(() => {
   flex-direction: column;
   align-items: center;
   gap: 1rem;
+}
+
+.game-screen-done h1:first-child {
+  animation: backInDown 1s linear;
+}
+
+.score-counter {
+  display: flex;
+  gap: 5px;
+}
+.score-counter h1:first-child {
+  animation: backInLeft 1s linear 1s;
+  animation-fill-mode: backwards;
+}
+.score-counter h1:last-child {
+  animation: zoomInRight 1s linear 1.5s;
+  animation-fill-mode: backwards;
 }
 
 .game-info {
@@ -415,9 +448,32 @@ const timerUntilGameBeggins = setInterval(() => {
   animation: test 0.3s linear;
 }
 .game-appear-leave-active {
-  animation: test 0.3s linear reverse;
+  animation: test 0.3s linear 0.3s reverse;
+}
+.game-appear-leave-active .game-screen {
+  opacity: 0;
+  transition: 0.3s all linear;
+  // transition-delay: 0.3;
 }
 
+.go-back {
+  position: absolute;
+  top: 0%;
+  left: 0%;
+  padding: 1rem;
+  background-color: #fff;
+  border-bottom-right-radius: 15px;
+  transform-origin: right;
+  cursor: pointer;
+}
+
+.go-back:hover {
+  background-color: red;
+}
+.back-icon {
+  font-size: 2rem;
+  color: black;
+}
 @keyframes test {
   0% {
     transform: scaleX(0.3);
