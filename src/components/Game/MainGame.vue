@@ -1,29 +1,38 @@
 <template>
   <div>
-    <h1 v-if="!startGame">{{ timer }}</h1>
-    <div class="selected-word" v-else>
-      <div class="game-screen" v-if="!gameFinished">
-        <h3>{{ roundIndex }} / 10</h3>
-        <div class="timer">
-          <h3>{{ displaySeconds }}</h3>
+    <Transition name="game-appear">
+      <h1 v-if="!startGame">{{ timer }}</h1>
+      <div class="selected-word" v-else>
+        <div class="game-screen" v-if="!gameFinished">
+          <div class="game-info">
+            <h3>{{ roundIndex }} / 10</h3>
+            <h3 :class="getProcentageColor">
+              {{ stringFamiliarProcentage }} %
+            </h3>
+          </div>
+          <div class="timer">
+            <h3>{{ displaySeconds }}</h3>
 
-          :
+            :
 
-          <h3>{{ scoreTimerMiliSeconds }} ms</h3>
+            <h3>{{ scoreTimerMiliSeconds }} ms</h3>
+          </div>
+
+          <h1>{{ selectedWord }}</h1>
+          <h2 class="typed-word">{{ typedWord }}</h2>
         </div>
-        <h1>{{ selectedWord }}</h1>
-        <h2 class="typed-word">{{ typedWord }}</h2>
+        <div class="game-screen-done" v-else>
+          <h1>Done!</h1>
+          <h1>Your score: {{ calculateScore() }}</h1>
+        </div>
       </div>
-      <div class="game-screen-done" v-else>
-        <h1>Done!</h1>
-        <h1>Your score: {{ calculateScore() }}</h1>
-      </div>
-    </div>
+    </Transition>
   </div>
 </template>
 
 <script setup>
 import { ref, watch, onMounted, computed } from "vue";
+import * as stringSimilarity from "string-similarity";
 const timer = ref(3);
 const startGame = ref(false);
 const gameFinished = ref(false);
@@ -226,30 +235,19 @@ const listOfWords = [
     antonym: ["aid", "pleasure", "relief", "joy"],
   },
   {
-    word: "cool",
-    antonym: ["hot", "warm"],
+    word: "begin",
+    antonym: ["end", "stop", "halt", "crease"],
   },
   {
-    word: "cool",
-    antonym: ["hot", "warm"],
-  },
-  {
-    word: "cool",
-    antonym: ["hot", "warm"],
-  },
-  {
-    word: "cool",
-    antonym: ["hot", "warm"],
-  },
-  {
-    word: "cool",
-    antonym: ["hot", "warm"],
+    word: "rise",
+    antonym: ["descend", "drop"],
   },
 ];
 const scoreTimerMiliSeconds = ref(0);
 const scoreTimerSeconds = ref(0);
 const selectedWord = ref(generateWord());
 const typedWord = ref("");
+const stringFamiliarProcentage = ref(0.0);
 
 let interval;
 const displaySeconds = computed(() => {
@@ -261,13 +259,21 @@ watch(typedWord, (newValue) => {
   const randomWord = listOfWords.findIndex((w, i) => {
     if (w.word === selectedWord.value) return i;
   });
-  console.log(randomWord);
   listOfWords[randomWord].antonym.forEach((word) => {
     if (typedWord.value.toLowerCase() === word) {
       guessedWords.value++;
       nextWord();
     }
   });
+
+  const bestPercentage = stringSimilarity.findBestMatch(
+    typedWord.value.toLowerCase(),
+    listOfWords[randomWord].antonym
+  );
+
+  stringFamiliarProcentage.value = (
+    bestPercentage.bestMatch.rating * 100
+  ).toFixed(2);
 });
 watch(startGame, (newValue) => {
   if (newValue === true) {
@@ -277,7 +283,6 @@ watch(startGame, (newValue) => {
         scoreTimerSeconds.value++;
       }
       scoreTimerMiliSeconds.value++;
-      console.log("veikiu");
     }, 10);
   } else {
     clearInterval(interval);
@@ -288,6 +293,14 @@ watch(roundIndex, (newValue) => {
     clearInterval(interval);
     gameFinished.value = true;
   }
+});
+
+const getProcentageColor = computed(() => {
+  return {
+    red: stringFamiliarProcentage.value <= 25,
+    yellow: stringFamiliarProcentage.value >= 60,
+    green: stringFamiliarProcentage.value > 61,
+  };
 });
 
 const calculateScore = () => {
@@ -306,9 +319,7 @@ function nextWord() {
 
 function generateWord() {
   const randomWords = Math.ceil(Math.random() * (listOfWords.length - 1) + 0);
-  console.log("random index" + randomWords);
   const word = listOfWords[randomWords].word;
-  console.log(word);
   return word;
 }
 
@@ -325,6 +336,8 @@ const typeWord = (e) => {
   } else {
     typedWord.value += key;
   }
+  console.log("selected " + selectedWord.value);
+  console.log("typed " + selectedWord.value);
 };
 
 const timerUntilGameBeggins = setInterval(() => {
@@ -373,5 +386,47 @@ const timerUntilGameBeggins = setInterval(() => {
   left: 50%;
   transform: translateX(-50%);
   font-size: 3rem;
+}
+
+.game-screen {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+.game-info {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  font-size: 1.6rem;
+}
+.red {
+  color: red;
+}
+.yellow {
+  color: yellow;
+}
+.green {
+  color: green;
+}
+
+.game-appear-enter-active {
+  animation: test 0.3s linear;
+}
+.game-appear-leave-active {
+  animation: test 0.3s linear reverse;
+}
+
+@keyframes test {
+  0% {
+    transform: scaleX(0.3);
+  }
+  50% {
+    transform: scaleX(1);
+  }
+  100% {
+    transform: scale(1);
+  }
 }
 </style>

@@ -1,10 +1,12 @@
 <template>
   <container class="game-menu">
-    <div class="game-menu-selector" v-if="!gameStarted">
-      <button @click="gameStarted = true">Play</button>
-      <button>How to play?</button>
-    </div>
-    <main-game v-else></main-game>
+    <Transition name="game-appear" mode="out-in">
+      <div class="game-menu-selector" v-if="!gameStarted">
+        <button @click="gameStarted = true">Play</button>
+        <button>How to play?</button>
+      </div>
+      <main-game v-else></main-game>
+    </Transition>
   </container>
 </template>
 
@@ -28,9 +30,9 @@ const gameStarted = ref(false);
 button {
   font-family: inherit;
   font-size: 3rem;
-  padding: calc($default-padding - 2rem);
+  padding: calc($default-padding - 1rem);
   border-radius: 10px;
-  background-color: $rich-black;
+  background-color: $imperial-red;
   box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
   font-weight: 600;
   cursor: pointer;
@@ -43,10 +45,36 @@ button {
   display: flex;
   flex-direction: column;
   min-width: 50%;
-  gap: 1rem;
+  gap: 3rem;
   align-items: center;
   border-radius: 15px;
   padding: $default-padding;
   box-shadow: 0 10px 10px rgba(0, 0, 0, 0.5);
+}
+
+.game-appear-leave-active {
+  animation: test 0.3s linear 0.3s;
+}
+.game-appear-leave-active button {
+  animation: test2 0.3s forwards;
+}
+@keyframes test {
+  0% {
+    transform: scaleX(1);
+  }
+  50% {
+    transform: scaleX(0.3);
+  }
+  100% {
+    transform: scale(0);
+  }
+}
+@keyframes test2 {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
 }
 </style>
