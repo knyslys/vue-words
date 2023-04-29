@@ -44,6 +44,7 @@ import { ref, watch, onMounted, computed, onUnmounted } from "vue";
 import "animate.css";
 import * as stringSimilarity from "string-similarity";
 import { Icon } from "@iconify/vue";
+
 const timer = ref(3);
 const startGame = ref(false);
 const gameFinished = ref(false);
@@ -259,7 +260,6 @@ const scoreTimerSeconds = ref(0);
 const selectedWord = ref(generateWord());
 const typedWord = ref("");
 const stringFamiliarProcentage = ref(0.0);
-
 let interval;
 const displaySeconds = computed(() => {
   if (scoreTimerSeconds.value < 10) return "0:" + scoreTimerSeconds.value;
@@ -319,6 +319,16 @@ const calculateScore = () => {
   const timePenalty =
     scoreTimerSeconds.value + scoreTimerMiliSeconds.value * 0.1;
   const finalScore = Math.ceil(scoreForGuessedWords / timePenalty);
+
+  if (localStorage.getItem("scores") === null) {
+    localStorage.setItem("scores", JSON.stringify([finalScore]));
+  } else {
+    const allScores = JSON.parse(localStorage.getItem("scores"));
+    allScores.push(finalScore);
+    console.log(allScores);
+    localStorage.setItem("scores", JSON.stringify(allScores));
+  }
+
   return finalScore;
 };
 
